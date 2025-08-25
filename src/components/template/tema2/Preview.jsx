@@ -4,7 +4,7 @@ import tengah from './page/bgtext.png';
 import Countdown from './components/Countdown';
 import Medsos from './components/Medsos';
 import React from 'react';
-import './app.css';
+import './App.css';
 import Ucapan from './components/Ucapan';
 import MusicWidget from './components/Music';
 
