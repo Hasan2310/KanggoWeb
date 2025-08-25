@@ -5,7 +5,7 @@ import PreviewTema3 from "./components/template/tema3/Preview";
 import PreviewTema4 from "./components/template/tema4/Preview";
 import { useSearchParams } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import Input from "./components/input";
+import Input from "./components/Input";
 import tema1 from "/Tema1.png";
 import tema2 from "/Tema2.png";
 import tema3 from "/Tema3.png";
