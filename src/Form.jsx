@@ -18,8 +18,8 @@ const Form = () => {
   const sourceFromUrl = searchParams.get("source") || "web";
 
   const [step, setStep] = useState(1);
-  const [tema, setTema] = useState(temaFromUrl);
-  const [source, setSource] = useState(sourceFromUrl);
+  // const [tema, setTema] = useState(temaFromUrl);
+  // const [source, setSource] = useState(sourceFromUrl);
 
   // Info Pesanan
   const [username, setUsername] = useState("");
@@ -47,12 +47,18 @@ const Form = () => {
       ? `${tahun}-${bulan}-${tanggal}T${waktumulai}:00`
       : "";
 
+  const [tema, setTema] = useState("");
+  const [source, setSource] = useState("web");
+
   useEffect(() => {
-    const newParams = new URLSearchParams(searchParams); // clone param lama
-    newParams.set("tema", tema);
-    newParams.set("source", source);
-    setSearchParams(newParams);
-  }, [tema, source, setSearchParams, searchParams]);
+    const params = new URLSearchParams(window.location.search);
+    const temaFromUrl = params.get("tema") || "";
+    const sourceFromUrl = params.get("source") || "web";
+
+    setTema(temaFromUrl);
+    setSource(sourceFromUrl);
+  }, []);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
