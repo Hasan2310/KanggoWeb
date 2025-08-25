@@ -48,11 +48,11 @@ const Form = () => {
       : "";
 
   useEffect(() => {
-    const newParams = new URLSearchParams();
+    const newParams = new URLSearchParams(searchParams); // clone param lama
     newParams.set("tema", tema);
     newParams.set("source", source);
     setSearchParams(newParams);
-  }, [tema, source, setSearchParams]);
+  }, [tema, source, setSearchParams, searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -149,7 +149,7 @@ ${catatan ? `Catatan: ${catatan}` : ""}
                 bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 
                 rounded-xl shadow-md animate-pulse h-[90vh] flex items-center justify-center">
             <span className="text-lg md:text-xl tracking-wide">
-                🎨 Silakan pilih <span className="underline decoration-wavy">tema</span> terlebih dulu!
+              🎨 Silakan pilih <span className="underline decoration-wavy">tema</span> terlebih dulu!
             </span>
           </div>
 
