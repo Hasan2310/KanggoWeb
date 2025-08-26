@@ -211,15 +211,32 @@ ${catatan ? `Catatan: ${catatan}` : ""}
       return (
         <div className="space-y-8">
           {/* Grup 1: Info Pesanan */}
+          {/* Grup 1: Info Pesanan */}
           <div className="space-y-4">
             <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
               Info Pesanan
             </h2>
+
+            {/* Pilihan Sumber Pemesanan */}
+            <label className="block font-medium text-gray-700">Pemesanan Dari</label>
+            <select
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              className="w-full border border-gray-200 p-3 rounded-xl outline-none 
+      focus:ring-2 focus:ring-[#D89A79]/40 focus:border-[#D89A79] transition"
+            >
+              <option value="web">Website</option>
+              <option value="shopee">Shopee</option>
+              <option value="lazada">Lazada</option>
+              <option value="tokopedia">Tokopedia</option>
+              <option value="lainnya">Lainnya</option>
+            </select>
+
             <Input
               type="text"
               placeholder={`Username ${source}`}
               className="w-full border border-gray-200 p-3 rounded-xl outline-none 
-            focus:ring-2 focus:ring-[#D89A79]/40 focus:border-[#D89A79] transition"
+      focus:ring-2 focus:ring-[#D89A79]/40 focus:border-[#D89A79] transition"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -227,12 +244,13 @@ ${catatan ? `Catatan: ${catatan}` : ""}
             <textarea
               placeholder="Catatan (opsional)"
               className="w-full border border-gray-200 p-3 rounded-xl outline-none 
-            focus:ring-2 focus:ring-[#D89A79]/40 focus:border-[#D89A79] transition"
+      focus:ring-2 focus:ring-[#D89A79]/40 focus:border-[#D89A79] transition"
               rows={3}
               value={catatan}
               onChange={(e) => setCatatan(e.target.value)}
             />
           </div>
+
 
           {/* Grup 2: Data Mempelai */}
           <div className="space-y-4">
