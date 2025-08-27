@@ -152,8 +152,8 @@ const Form = () => {
         return (
           <div className="p-6 text-center text-gray-700 font-semibold 
             bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 
-            rounded-xl shadow-md animate-pulse h-auto flex items-center justify-center">
-            🎨 Silakan pilih <span className="underline decoration-wavy">tema</span>
+            rounded-xl shadow-md animate-pulse h-screen flex items-center justify-center">
+            🎨 Silakan pilih&nbsp;<span className="underline decoration-wavy"> tema</span>
           </div>
         );
     }
