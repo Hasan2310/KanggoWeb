@@ -276,7 +276,7 @@ const Form = () => {
   );
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto px-8">
       <title>Buat Undangan | KanggoWeb</title>
       <div className="flex flex-col md:flex-row gap-8">
         <div className="hidden md:flex justify-center items-center md:w-1/2">{renderPhonePreview()}</div>
@@ -287,7 +287,7 @@ const Form = () => {
              max-h-screen scroll-y-hidden"
         >
           {/* Progress */}
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-8 mt-8">
             {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex-1 flex items-center">
                 <div className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-semibold text-sm transition ${step >= s ? "bg-[#D89A79] text-white border-[#D89A79]" : "bg-white text-gray-500 border-gray-300"}`}>{s}</div>
