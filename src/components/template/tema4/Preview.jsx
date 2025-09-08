@@ -44,7 +44,7 @@ const Home = ({
         <div className="absolute top-0 left-0 w-full h-[80vh] bg-black/30"></div>
 
         {/* Bagian bawah gradient */}
-        <div className="absolute bottom-0 left-0 w-full h-[20vh] backdrop-blur-xs bg-gradient-to-t from-white via-white/60 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 w-full h-[20vh] backdrop-blur-xs bg-gradient-to-t from-[#F5F5F5] via-[#F5F5F5]/60 to-transparent"></div>
 
         {/* Teks di tengah */}
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center z-10">

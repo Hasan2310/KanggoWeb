@@ -11,8 +11,73 @@ import tema2 from "/Tema2.png";
 import tema3 from "/Tema3.png";
 import tema4 from "/Tema4.png";
 import Swal from "sweetalert2";
+import { AiOutlineInfoCircle } from "react-icons/ai"; // ✅ icon "i"
 import "./App.css";
 
+/* ======================= REUSABLE INPUT DENGAN INFO ======================= */
+const InputWithInfo = ({ placeholder, value, setValue, infoType }) => {
+  const [showExample, setShowExample] = useState(false);
+
+  // Auto close setelah 3 detik
+  useEffect(() => {
+    let timer;
+    if (showExample) {
+      timer = setTimeout(() => {
+        setShowExample(false);
+      }, 3000);
+    }
+    return () => clearTimeout(timer);
+  }, [showExample]);
+
+  return (
+    <div className="relative w-full">
+      <Input
+        type="text"
+        placeholder={placeholder}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D89A79] pr-10"
+      />
+
+      {/* Icon info */}
+      <button
+        type="button"
+        className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#D89A79]"
+        onClick={() => setShowExample(true)}
+      >
+        <AiOutlineInfoCircle size={20} />
+      </button>
+
+      {/* Popover contoh (animated) */}
+      <AnimatePresence>
+        {showExample && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.3 }}
+            className="absolute right-0 mt-2 w-56 rounded-lg border bg-white shadow-lg p-3 text-sm z-50"
+          >
+            <p className="font-semibold mb-2">Contoh {placeholder}</p>
+            {infoType === "username" ? (
+              <img
+                src="/shopee.jpeg" // contoh gambar taruh di public/
+                alt="contoh username"
+                className="rounded-md border"
+              />
+            ) : (
+              <p className="text-gray-700">
+                {infoType === "waliPria" ? "Sejejo & Siti" : "Budi & Ani"}
+              </p>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+/* ======================= FORM ======================= */
 const Form = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const temaFromUrl = searchParams.get("tema") || "";
@@ -64,9 +129,24 @@ const Form = () => {
     e.preventDefault();
 
     const data = {
-      username, catatan, source, pria, wanita, walipria, waliwanita, hari,
-      tanggal, bulan, tahun, waktumulai, waktuselesai, alamat, namagedung,
-      tanggalPernikahan: targetDate, cerita, tema,
+      username,
+      catatan,
+      source,
+      pria,
+      wanita,
+      walipria,
+      waliwanita,
+      hari,
+      tanggal,
+      bulan,
+      tahun,
+      waktumulai,
+      waktuselesai,
+      alamat,
+      namagedung,
+      tanggalPernikahan: targetDate,
+      cerita,
+      tema,
     };
 
     let progressInterval;
@@ -78,7 +158,7 @@ const Form = () => {
       position: "top",
       showConfirmButton: false,
       showCloseButton: true,
-      timer: undefined, // ga auto-close
+      timer: undefined,
     });
 
     // ⏳ Loading toast
@@ -93,9 +173,6 @@ const Form = () => {
         bar.style.bottom = "0";
         bar.style.left = "0";
         bar.style.right = "0";
-        bar.style.margin = "0";
-        bar.style.padding = "0";
-        bar.style.borderRadius = "0";
         toastEl.appendChild(bar);
 
         let width = 0;
@@ -109,22 +186,19 @@ const Form = () => {
     });
 
     try {
-      // 🔑 pakai "no-cors" kalau GAS belum support CORS
       await fetch(
         "https://script.google.com/macros/s/AKfycbwgsM2aNzt7E-jiOa3iir7eB0JAEkXmBQflCrwgSV-3xS-rJlir5l4y4EHTemuoi9SlBA/exec",
         {
           method: "POST",
           body: JSON.stringify(data),
           headers: { "Content-Type": "application/json" },
-          mode: "no-cors", // <– tambahin lagi kalau GAS belum diubah
+          mode: "no-cors",
         }
       );
 
-      // ✅ stop progress
       clearInterval(progressInterval);
       if (bar) bar.style.width = "100%";
 
-      // 🎉 anggap sukses (karena no-cors ga bisa cek real response)
       toast.fire({
         title: "Data terkirim",
       });
@@ -141,19 +215,35 @@ const Form = () => {
   };
 
   const renderPreview = () => {
-    const props = { pria, walipria, wanita, waliwanita, tanggal, bulan, tahun, hari, waktumulai, waktuselesai, alamat, namagedung, tanggalPernikahan: targetDate, cerita };
+    const props = {
+      pria,
+      walipria,
+      wanita,
+      waliwanita,
+      tanggal,
+      bulan,
+      tahun,
+      hari,
+      waktumulai,
+      waktuselesai,
+      alamat,
+      namagedung,
+      tanggalPernikahan: targetDate,
+      cerita,
+    };
 
     switch (tema) {
-      case "Midnight Wave": return <PreviewTema1 {...props} />;
-      case "Velvet Cream": return <PreviewTema2 {...props} />;
-      case "Emerald Grove": return <PreviewTema3 {...props} />;
-      case "Choco Drift": return <PreviewTema4 {...props} />;
+      case "Emerald Grove":
+        return <PreviewTema3 {...props} />;
       default:
         return (
-          <div className="p-6 text-center text-gray-700 font-semibold 
+          <div
+            className="p-6 text-center text-gray-700 font-semibold 
             bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 
-            rounded-xl shadow-md animate-pulse h-screen flex items-center justify-center">
-            🎨 Silakan pilih&nbsp;<span className="underline decoration-wavy"> tema</span>
+            rounded-xl shadow-md animate-pulse h-screen flex items-center justify-center"
+          >
+            🎨 Silakan pilih&nbsp;
+            <span className="underline decoration-wavy"> tema</span>
           </div>
         );
     }
@@ -163,7 +253,7 @@ const Form = () => {
     if (step === 1) {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          {[{ name: "Midnight Wave", preview: tema1 }, { name: "Velvet Cream", preview: tema2 }, { name: "Emerald Grove", preview: tema3 }, { name: "Choco Drift", preview: tema4 }].map((option) => {
+          {[{ name: "Emerald Grove", preview: tema3 }].map((option) => {
             const isSelected = tema === option.name;
             return (
               <motion.div
@@ -174,8 +264,18 @@ const Form = () => {
                 className={`cursor-pointer border-2 rounded-xl overflow-hidden shadow-md flex-1 transition 
                   ${isSelected ? "border-[#D89A79]" : "border-gray-200"}`}
               >
-                <img src={option.preview} alt={option.name} className="h-50 object-cover mx-auto" />
-                <div className={`p-3 text-center font-semibold ${isSelected ? "bg-[#D89A79] text-white" : "bg-gray-50 text-gray-700"}`}>
+                <img
+                  src={option.preview}
+                  alt={option.name}
+                  className="h-50 object-cover mx-auto"
+                />
+                <div
+                  className={`p-3 text-center font-semibold ${
+                    isSelected
+                      ? "bg-[#D89A79] text-white"
+                      : "bg-gray-50 text-gray-700"
+                  }`}
+                >
                   {option.name}
                 </div>
               </motion.div>
@@ -188,26 +288,36 @@ const Form = () => {
     if (step === 2) {
       return (
         <div className="space-y-8">
-          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">Info Pesanan</h2>
+          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
+            Info Pesanan
+          </h2>
           <label className="block font-medium">Pemesanan Dari</label>
-          <select value={source} onChange={(e) => setSource(e.target.value)} className="w-full border p-3 rounded-xl border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]">
-            <option value="web">🌐 Website</option>
+          <select
+            value={source}
+            onChange={(e) => setSource(e.target.value)}
+            className="w-full border p-3 rounded-xl border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
+          >
             <option value="shopee">🛒 Shopee</option>
             <option value="lazada">📦 Lazada</option>
             <option value="tokopedia">🐸 Tokopedia</option>
           </select>
 
           {source !== "web" && (
-            <Input
-              type="text"
+            <InputWithInfo
               placeholder={`Username ${source}`}
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D89A79]"
+              setValue={setUsername}
+              infoType="username"
             />
-
           )}
-          <textarea placeholder="Catatan (opsional)" className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]" rows={3} value={catatan} onChange={(e) => setCatatan(e.target.value)}required></textarea>
+
+          <textarea
+            placeholder="Catatan (opsional)"
+            className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
+            rows={3}
+            value={catatan}
+            onChange={(e) => setCatatan(e.target.value)}
+          ></textarea>
         </div>
       );
     }
@@ -215,11 +325,35 @@ const Form = () => {
     if (step === 3) {
       return (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">Data Mempelai</h2>
-          <Input type="text" placeholder="Nama Pria" className="w-full border p-3 rounded-xl" value={pria} onChange={(e) => setPria(e.target.value)} />
-          <Input type="text" placeholder="Nama Wanita" className="w-full border p-3 rounded-xl" value={wanita} onChange={(e) => setWanita(e.target.value)} />
-          <Input type="text" placeholder="Wali Pria" className="w-full border p-3 rounded-xl" value={walipria} onChange={(e) => setWaliPria(e.target.value)} />
-          <Input type="text" placeholder="Wali Wanita" className="w-full border p-3 rounded-xl" value={waliwanita} onChange={(e) => setWaliWanita(e.target.value)} />
+          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
+            Data Mempelai
+          </h2>
+          <Input
+            type="text"
+            placeholder="Nama Pria"
+            className="w-full border p-3 rounded-xl"
+            value={pria}
+            onChange={(e) => setPria(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Nama Wanita"
+            className="w-full border p-3 rounded-xl"
+            value={wanita}
+            onChange={(e) => setWanita(e.target.value)}
+          />
+          <InputWithInfo
+            placeholder="Wali Pria"
+            value={walipria}
+            setValue={setWaliPria}
+            infoType="waliPria"
+          />
+          <InputWithInfo
+            placeholder="Wali Wanita"
+            value={waliwanita}
+            setValue={setWaliWanita}
+            infoType="waliWanita"
+          />
         </div>
       );
     }
@@ -227,9 +361,19 @@ const Form = () => {
     if (step === 4) {
       return (
         <div className="space-y-4">
-          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">Detail Acara</h2>
-          <Input type="text" placeholder="Hari" className="w-full border p-3 rounded-xl" value={hari} onChange={(e) => setHari(e.target.value)} />
-          <Input type="date" className="w-full border p-3 rounded-xl"
+          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
+            Detail Acara
+          </h2>
+          <Input
+            type="text"
+            placeholder="Hari"
+            className="w-full border p-3 rounded-xl"
+            value={hari}
+            onChange={(e) => setHari(e.target.value)}
+          />
+          <Input
+            type="date"
+            className="w-full border p-3 rounded-xl"
             onChange={(e) => {
               const dateObj = new Date(e.target.value);
               setTanggal(String(dateObj.getDate()).padStart(2, "0"));
@@ -237,11 +381,39 @@ const Form = () => {
               setTahun(String(dateObj.getFullYear()));
             }}
           />
-          <Input type="time" className="w-full border p-3 rounded-xl" value={waktumulai} onChange={(e) => setWaktuMulai(e.target.value)} />
-          <Input type="time" className="w-full border p-3 rounded-xl" value={waktuselesai} onChange={(e) => setWaktuSelesai(e.target.value)} />
-          <Input type="text" placeholder="Nama Gedung" className="w-full border p-3 rounded-xl" value={namagedung} onChange={(e) => setNamaGedung(e.target.value)} />
-          <textarea placeholder="Alamat" className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]" value={alamat} onChange={(e) => setAlamat(e.target.value)} required></textarea>
-          <textarea placeholder="Cerita" className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]" value={cerita} onChange={(e) => setCerita(e.target.value)} required></textarea>
+          <Input
+            type="time"
+            className="w-full border p-3 rounded-xl"
+            value={waktumulai}
+            onChange={(e) => setWaktuMulai(e.target.value)}
+          />
+          <Input
+            type="time"
+            className="w-full border p-3 rounded-xl"
+            value={waktuselesai}
+            onChange={(e) => setWaktuSelesai(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Nama Gedung"
+            className="w-full border p-3 rounded-xl"
+            value={namagedung}
+            onChange={(e) => setNamaGedung(e.target.value)}
+          />
+          <textarea
+            placeholder="Alamat"
+            className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
+            value={alamat}
+            onChange={(e) => setAlamat(e.target.value)}
+            required
+          ></textarea>
+          <textarea
+            placeholder="Cerita"
+            className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
+            value={cerita}
+            onChange={(e) => setCerita(e.target.value)}
+            required
+          ></textarea>
         </div>
       );
     }
@@ -252,9 +424,18 @@ const Form = () => {
           <div className="flex justify-center items-center md:hidden w-full mb-6">
             {renderPhonePreview()}
           </div>
-          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">Preview & Kirim</h2>
-          <p className="text-gray-600">Lihat preview undangan sebelum dikirim</p>
-          <button type="submit" className="w-full py-3 bg-[#D89A79] text-white font-semibold rounded-xl hover:bg-[#b97d61] transition">Kirim</button>
+          <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
+            Preview & Kirim
+          </h2>
+          <p className="text-gray-600">
+            Lihat preview undangan sebelum dikirim
+          </p>
+          <button
+            type="submit"
+            className="w-full py-3 bg-[#D89A79] text-white font-semibold rounded-xl hover:bg-[#b97d61] transition"
+          >
+            Kirim
+          </button>
         </div>
       );
     }
@@ -264,22 +445,37 @@ const Form = () => {
     if (step === 1) return tema.trim() !== "";
     if (step === 2) return source === "web" || username.trim() !== "";
     if (step === 3) return pria.trim() !== "" && wanita.trim() !== "";
-    if (step === 4) return hari.trim() !== "" && tanggal && bulan && tahun && waktumulai.trim() !== "" && alamat.trim() !== "";
+    if (step === 4)
+      return (
+        hari.trim() !== "" &&
+        tanggal &&
+        bulan &&
+        tahun &&
+        waktumulai.trim() !== "" &&
+        alamat.trim() !== ""
+      );
     return true;
   };
 
   const renderPhonePreview = () => (
-    <motion.div className="relative w-[390px] h-screen bg-black rounded-[2rem] p-4 shadow-2xl flex justify-center items-center"
-      animate={{ y: [0, -6, 0] }} transition={{ duration: 6, repeat: Infinity }}>
-      <div className="bg-white w-full h-full rounded-[1.5rem] overflow-hidden scroll-y-hidden">{renderPreview()}</div>
+    <motion.div
+      className="relative w-[390px] h-screen bg-black rounded-[2rem] p-4 shadow-2xl flex justify-center items-center"
+      animate={{ y: [0, -6, 0] }}
+      transition={{ duration: 6, repeat: Infinity }}
+    >
+      <div className="bg-white w-full h-full rounded-[1.5rem] scroll-y-hidden">
+        {renderPreview()}
+      </div>
     </motion.div>
   );
 
   return (
-    <div className="mx-auto px-8">
+    <div className="mx-auto">
       <title>Buat Undangan | KanggoWeb</title>
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="hidden md:flex justify-center items-center md:w-1/2">{renderPhonePreview()}</div>
+        <div className="hidden md:flex justify-center items-center md:w-1/2">
+          {renderPhonePreview()}
+        </div>
         <motion.div
           className="fixed bottom-0 right-0 w-full md:w-1/2
              bg-white/90 p-8 border border-[#D89A79]/30 
@@ -287,23 +483,69 @@ const Form = () => {
              max-h-screen scroll-y-hidden"
         >
           {/* Progress */}
-          <div className="flex items-center justify-between mb-8 mt-8">
+          <div className="flex items-center justify-between mb-8 mt-10">
             {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex-1 flex items-center">
-                <div className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-semibold text-sm transition ${step >= s ? "bg-[#D89A79] text-white border-[#D89A79]" : "bg-white text-gray-500 border-gray-300"}`}>{s}</div>
-                {s < 5 && <div className={`flex-1 h-[2px] mx-2 ${step > s ? "bg-[#D89A79]" : "bg-gray-300"}`} />}
+                <div
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-semibold text-sm transition ${
+                    step >= s
+                      ? "bg-[#D89A79] text-white border-[#D89A79]"
+                      : "bg-white text-gray-500 border-gray-300"
+                  }`}
+                >
+                  {s}
+                </div>
+                {s < 5 && (
+                  <div
+                    className={`flex-1 h-[2px] mx-2 ${
+                      step > s ? "bg-[#D89A79]" : "bg-gray-300"
+                    }`}
+                  />
+                )}
               </div>
             ))}
           </div>
           <form onSubmit={handleSubmit} className="space-y-6">
             <AnimatePresence mode="wait">
-              <motion.div key={step} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.45 }}>
+              <motion.div
+                key={step}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.3 }}
+              >
                 {renderStep()}
               </motion.div>
             </AnimatePresence>
-            <div className="flex justify-between pt-6">
-              {step > 1 && <button type="button" onClick={() => setStep(step - 1)} className="px-6 py-3 bg-gray-100 rounded-full">Back</button>}
-              {step < 5 && <button type="button" onClick={() => setStep(step + 1)} disabled={!isStepValid()} className={`px-8 py-3 rounded-full font-semibold ${isStepValid() ? "bg-[#D89A79] text-white hover:bg-[#b97d61]" : "bg-gray-300 text-gray-500 cursor-not-allowed"}`}>Next</button>}
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-between items-center pt-4">
+              {step > 1 ? (
+                <button
+                  type="button"
+                  onClick={() => setStep(step - 1)}
+                  className="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
+                >
+                  Back
+                </button>
+              ) : (
+                <div></div>
+              )}
+
+              {step < 5 ? (
+                <button
+                  type="button"
+                  onClick={() => isStepValid() && setStep(step + 1)}
+                  disabled={!isStepValid()}
+                  className={`px-8 py-3 rounded-full font-semibold transition ${
+                    isStepValid()
+                      ? "bg-[#D89A79] text-white hover:bg-[#b97d61]"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  Next
+                </button>
+              ) : null}
             </div>
           </form>
         </motion.div>
