@@ -155,10 +155,7 @@ const Form = () => {
           text: `ID Pesanan: ${result.id}`,
           confirmButtonText: "Salin Pesan",
           allowOutsideClick: false,
-          didRender: () => {
-            const btn = Swal.getConfirmButton();
-            btn.classList.add("bg-[#D89A79]", "hover:bg-[#b97d61]", "text-white", "px-6", "py-2", "rounded-xl", "font-semibold");
-          },
+          confirmButtonColor: "#D89A79",
         }).then(() => {
           const pesan = `
 Halo Admin 👋
