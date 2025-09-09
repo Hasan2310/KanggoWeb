@@ -175,10 +175,10 @@ const Form = () => {
 
     try {
       const res = await fetch("/api/form", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify(data),
-});
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
 
       const result = await res.json();
@@ -193,7 +193,33 @@ const Form = () => {
           icon: "success",
           confirmButtonText: "Lanjut ke WhatsApp",
         }).then(() => {
-          const pesan = `Halo, saya ${result.pria} & ${result.wanita}, pesanan saya ID: ${result.id}`;
+          const pesan = `
+Halo Admin 👋
+
+Saya *${result.pria}* & *${result.wanita}* ingin konfirmasi pesanan dengan detail berikut:
+
+📌 *ID Pesanan:* ${result.id}
+👤 *Username:* ${result.username}
+📝 *Catatan:* ${result.catatan || "-"}
+📖 *Source:* ${result.source || "-"}
+
+👰 *Mempelai Wanita:* ${result.wanita}
+🤵 *Mempelai Pria:* ${result.pria}
+👩‍🦳 *Wali Wanita:* ${result.waliWanita || "-"}
+👨‍🦳 *Wali Pria:* ${result.waliPria || "-"}
+
+📅 *Tanggal:* ${result.hari}, ${result.tanggal} ${result.bulan} ${result.tahun}
+🕒 *Waktu:* ${result.waktu}
+📍 *Alamat:* ${result.alamat}
+🏢 *Gedung:* ${result.namaGedung || "-"}
+
+💍 *Tanggal Pernikahan:* ${result.tanggalPernikahan}
+🎨 *Tema:* ${result.tema || "-"}
+📚 *Cerita:* ${result.cerita || "-"}
+
+_Status Pesanan: ${result.status}_
+`;
+
           window.open(
             `https://wa.me/6285215128586?text=${encodeURIComponent(pesan)}`,
             "_blank"
