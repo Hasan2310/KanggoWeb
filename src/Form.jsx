@@ -116,8 +116,11 @@ const Form = () => {
   }, [tema, source, setSearchParams, isInitial]);
 
   /* ======================= HANDLE SUBMIT ======================= */
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     const data = {
       username,
@@ -152,11 +155,11 @@ const Form = () => {
       if (result?.status === "success") {
         Swal.fire({
           title: "Data terkirim 🎉",
-          text: `Silakan salin pesan ini untuk konfirmasi ya ✨
-🆔 ID Pesanan: ${result.id}
-
-Setelah itu, kirimkan pesan ini ke admin lewat aplikasi yang dipesan (Shopee/Tokopedia/Lazada), 
-dan jangan lupa sertakan juga foto pernikahanmu 📸💍`,  
+          html: `Silakan salin pesan ini untuk konfirmasi ya ✨ <br><br>
+🆔 <b>ID Pesanan:</b> ${result.id} <br><br>
+Setelah itu, kirimkan pesan ini ke admin lewat aplikasi yang dipesan 
+(<i>Shopee / Tokopedia / Lazada</i>) <br>
+dan jangan lupa sertakan juga foto pernikahanmu 📸💍`,
           confirmButtonText: "Salin Pesan",
           allowOutsideClick: false,
           confirmButtonColor: "#D89A79",
@@ -209,6 +212,8 @@ _Status Pesanan: ${result.status}_
         title: "Gagal ngirim 😢",
         text: "Coba cek koneksi internet atau hubungi admin.",
       });
+    } finally {
+      setIsLoading(false); // tombol aktif lagi setelah selesai
     }
   };
 
@@ -376,9 +381,17 @@ _Status Pesanan: ${result.status}_
             </div>
             <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">Preview & Kirim</h2>
             <p className="text-gray-600">Lihat preview undangan sebelum dikirim</p>
-            <button type="submit" className="w-full py-3 bg-[#D89A79] text-white font-semibold rounded-xl hover:bg-[#b97d61] transition">
-              Kirim
+            <button
+              type="submit"
+              disabled={isLoading}
+              className={`w-full py-3 rounded-xl font-semibold transition ${isLoading
+                  ? "bg-gray-400 cursor-not-allowed text-white"
+                  : "bg-[#D89A79] hover:bg-[#b97d61] text-white"
+                }`}
+            >
+              {isLoading ? "Mengirim..." : "Kirim"}
             </button>
+
           </div>
         )}
       </motion.div>
