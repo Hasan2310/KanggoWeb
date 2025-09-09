@@ -174,14 +174,12 @@ const Form = () => {
     });
 
     try {
-      const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbyyccisyVBD9_dz4PNSO_Hm8n53cpvzY_pBPe9IYIYvKSX_SoNWAaYEyzag6173DIND2A/exec",
-        {
-          method: "POST",
-          body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      const res = await fetch("/api/form", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(data),
+});
+
 
       const result = await res.json();
 
