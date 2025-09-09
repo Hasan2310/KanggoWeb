@@ -116,84 +116,83 @@ const Form = () => {
   }, [tema, source, setSearchParams, isInitial]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = {
-      username,
-      catatan,
-      source,
-      pria,
-      wanita,
-      waliPria,
-      waliWanita,
-      hari,
-      tanggal,
-      bulan,
-      tahun,
-      waktu,
-      alamat,
-      namaGedung,
-      tanggalPernikahan: targetDate,
-      cerita,
-      tema,
-      status: "Pending",
-    };
+  const data = {
+    username,
+    catatan,
+    source,
+    pria,
+    wanita,
+    waliPria,
+    waliWanita,
+    hari,
+    tanggal,
+    bulan,
+    tahun,
+    waktu,
+    alamat,
+    namaGedung,
+    tanggalPernikahan: targetDate,
+    cerita,
+    tema,
+    status: "Pending",
+  };
 
-    let progressInterval;
-    let bar;
+  let progressInterval;
+  let bar;
 
-    let toast = Swal.mixin({
-      toast: true,
-      position: "top",
-      showConfirmButton: false,
-      showCloseButton: true,
-      timer: undefined,
+  let toast = Swal.mixin({
+    toast: true,
+    position: "top",
+    showConfirmButton: false,
+    showCloseButton: true,
+    timer: undefined,
+  });
+
+  toast.fire({
+    title: "Ngirim data...",
+    didOpen: (toastEl) => {
+      bar = document.createElement("div");
+      bar.style.height = "4px";
+      bar.style.background = "#D89A79";
+      bar.style.width = "0%";
+      bar.style.position = "absolute";
+      bar.style.bottom = "0";
+      bar.style.left = "0";
+      bar.style.right = "0";
+      toastEl.appendChild(bar);
+
+      let width = 0;
+      progressInterval = setInterval(() => {
+        if (width < 90) {
+          width += 1;
+          bar.style.width = width + "%";
+        }
+      }, 50);
+    },
+  });
+
+  try {
+    const res = await fetch("/api/form", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
 
-    toast.fire({
-      title: "Ngirim data...",
-      didOpen: (toastEl) => {
-        bar = document.createElement("div");
-        bar.style.height = "4px";
-        bar.style.background = "#D89A79";
-        bar.style.width = "0%";
-        bar.style.position = "absolute";
-        bar.style.bottom = "0";
-        bar.style.left = "0";
-        bar.style.right = "0";
-        toastEl.appendChild(bar);
+    const result = await res.json();
 
-        let width = 0;
-        progressInterval = setInterval(() => {
-          if (width < 90) {
-            width += 1;
-            bar.style.width = width + "%";
-          }
-        }, 50);
-      },
-    });
+    clearInterval(progressInterval);
+    if (bar) bar.style.width = "100%";
 
-    try {
-      const res = await fetch("/api/form", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-
-      const result = await res.json();
-
-      clearInterval(progressInterval);
-      if (bar) bar.style.width = "100%";
-
-      if (result?.status === "success") {
-        Swal.fire({
-          title: "Data terkirim 🎉",
-          text: `ID Pesanan: ${result.id}`,
-          icon: "success",
-          confirmButtonText: "Lanjut ke WhatsApp",
-        }).then(() => {
-          const pesan = `
+    if (result?.status === "success") {
+      Swal.fire({
+        title: "Data terkirim 🎉",
+        text: `ID Pesanan: ${result.id}`,
+        icon: "success",
+        confirmButtonText: "Salin Pesan",
+      }).then(() => {
+        const pesan = `
 Halo Admin 👋
 
 Saya *${result.pria}* & *${result.wanita}* ingin konfirmasi pesanan dengan detail berikut:
@@ -220,27 +219,34 @@ Saya *${result.pria}* & *${result.wanita}* ingin konfirmasi pesanan dengan detai
 _Status Pesanan: ${result.status}_
 `;
 
-          window.open(
-            `https://wa.me/6285215128586?text=${encodeURIComponent(pesan)}`,
-            "_blank"
-          );
+        navigator.clipboard.writeText(pesan).then(() => {
+          Swal.fire({
+            toast: true,
+            position: "top",
+            icon: "success",
+            title: "Pesan berhasil disalin ke clipboard ✨",
+            showConfirmButton: false,
+            timer: 2500,
+            timerProgressBar: true,
+          });
         });
-      } else {
-        throw new Error("Server error");
-      }
-    } catch (err) {
-      console.error("Fetch error:", err);
-
-      clearInterval(progressInterval);
-      if (bar) bar.style.width = "100%";
-
-      Swal.fire({
-        title: "Gagal ngirim 😢",
-        text: "Coba cek koneksi internet atau hubungi admin.",
-        icon: "error",
       });
+    } else {
+      throw new Error("Server error");
     }
-  };
+  } catch (err) {
+    console.error("Fetch error:", err);
+
+    clearInterval(progressInterval);
+    if (bar) bar.style.width = "100%";
+
+    Swal.fire({
+      title: "Gagal ngirim 😢",
+      text: "Coba cek koneksi internet atau hubungi admin.",
+      icon: "error",
+    });
+  }
+};
 
   const renderPreview = () => {
     const props = {
