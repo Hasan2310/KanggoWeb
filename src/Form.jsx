@@ -175,7 +175,7 @@ const Form = () => {
 
     try {
       const res = await fetch(
-        "https://script.google.com/macros/s/AKfycbxe_n14tqLMgZ66ztqzRf6roqL73KK1hkw_Rd3Y1uI2upyNpukQ90wd3wFOvbLEvPQ77A/exec",
+        "https://script.google.com/macros/s/AKfycbyyccisyVBD9_dz4PNSO_Hm8n53cpvzY_pBPe9IYIYvKSX_SoNWAaYEyzag6173DIND2A/exec",
         {
           method: "POST",
           body: JSON.stringify(data),
