@@ -155,8 +155,9 @@ const Form = () => {
           text: `ID Pesanan: ${result.id}`,
           confirmButtonText: "Salin Pesan",
           allowOutsideClick: false,
-          customClass: {
-            confirmButton: "bg-[#D89A79] hover:bg-[#b97d61] text-white px-6 py-2 rounded-xl font-semibold",
+          didRender: () => {
+            const btn = Swal.getConfirmButton();
+            btn.classList.add("bg-[#D89A79]", "hover:bg-[#b97d61]", "text-white", "px-6", "py-2", "rounded-xl", "font-semibold");
           },
         }).then(() => {
           const pesan = `
@@ -298,7 +299,7 @@ _Status Pesanan: ${result.status}_
               <option value="shopee">🛒 Shopee</option>
               <option value="lazada">📦 Lazada</option>
               <option value="tokopedia">🐸 Tokopedia</option>
-              <option value="web">🌐 Website</option>
+              {/* <option value="web">🌐 Website</option> */}
             </select>
 
             {source !== "web" && (
