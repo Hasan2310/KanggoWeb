@@ -115,7 +115,7 @@ const Form = () => {
     setSearchParams(newParams);
   }, [tema, source, setSearchParams, isInitial]);
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
 
   const data = {
@@ -195,26 +195,26 @@ const Form = () => {
         const pesan = `
 Halo Admin 👋
 
-Saya *${result.pria}* & *${result.wanita}* ingin konfirmasi pesanan dengan detail berikut:
+Saya *${data.pria}* & *${data.wanita}* ingin konfirmasi pesanan dengan detail berikut:
 
 📌 *ID Pesanan:* ${result.id}
-👤 *Username:* ${result.username}
-📝 *Catatan:* ${result.catatan || "-"}
-📖 *Source:* ${result.source || "-"}
+👤 *Username:* ${data.username || "-"}
+📝 *Catatan:* ${data.catatan || "-"}
+📖 *Source:* ${data.source || "-"}
 
-👰 *Mempelai Wanita:* ${result.wanita}
-🤵 *Mempelai Pria:* ${result.pria}
-👩‍🦳 *Wali Wanita:* ${result.waliWanita || "-"}
-👨‍🦳 *Wali Pria:* ${result.waliPria || "-"}
+👰 *Mempelai Wanita:* ${data.wanita || "-"}
+🤵 *Mempelai Pria:* ${data.pria || "-"}
+👩‍🦳 *Wali Wanita:* ${data.waliWanita || "-"}
+👨‍🦳 *Wali Pria:* ${data.waliPria || "-"}
 
-📅 *Tanggal:* ${result.hari}, ${result.tanggal} ${result.bulan} ${result.tahun}
-🕒 *Waktu:* ${result.waktu}
-📍 *Alamat:* ${result.alamat}
-🏢 *Gedung:* ${result.namaGedung || "-"}
+📅 *Tanggal:* ${data.hari || "-"}, ${data.tanggal || "-"} ${data.bulan || "-"} ${data.tahun || "-"}
+🕒 *Waktu:* ${data.waktu || "-"}
+📍 *Alamat:* ${data.alamat || "-"}
+🏢 *Gedung:* ${data.namaGedung || "-"}
 
-💍 *Tanggal Pernikahan:* ${result.tanggalPernikahan}
-🎨 *Tema:* ${result.tema || "-"}
-📚 *Cerita:* ${result.cerita || "-"}
+💍 *Tanggal Pernikahan:* ${data.tanggalPernikahan || "-"}
+🎨 *Tema:* ${data.tema || "-"}
+📚 *Cerita:* ${data.cerita || "-"}
 
 _Status Pesanan: ${result.status}_
 `;
@@ -247,6 +247,7 @@ _Status Pesanan: ${result.status}_
     });
   }
 };
+
 
   const renderPreview = () => {
     const props = {
