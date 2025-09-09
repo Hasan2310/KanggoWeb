@@ -152,7 +152,11 @@ const Form = () => {
       if (result?.status === "success") {
         Swal.fire({
           title: "Data terkirim 🎉",
-          text: `ID Pesanan: ${result.id}`,
+          text: `Silakan salin pesan ini untuk konfirmasi ya ✨
+🆔 ID Pesanan: ${result.id}
+
+Setelah itu, kirimkan pesan ini ke admin lewat aplikasi yang dipesan (Shopee/Tokopedia/Lazada), 
+dan jangan lupa sertakan juga foto pernikahanmu 📸💍`,  
           confirmButtonText: "Salin Pesan",
           allowOutsideClick: false,
           confirmButtonColor: "#D89A79",
