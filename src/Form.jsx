@@ -154,6 +154,10 @@ const Form = () => {
           title: "Data terkirim 🎉",
           text: `ID Pesanan: ${result.id}`,
           confirmButtonText: "Salin Pesan",
+          allowOutsideClick: false,
+          customClass: {
+            confirmButton: "bg-[#D89A79] hover:bg-[#b97d61] text-white px-6 py-2 rounded-xl font-semibold",
+          },
         }).then(() => {
           const pesan = `
 Halo Admin 👋
@@ -271,9 +275,8 @@ _Status Pesanan: ${result.status}_
                 >
                   <img src={option.preview} alt={option.name} className="h-50 object-cover mx-auto" />
                   <div
-                    className={`p-3 text-center font-semibold ${
-                      isSelected ? "bg-[#D89A79] text-white" : "bg-gray-50 text-gray-700"
-                    }`}
+                    className={`p-3 text-center font-semibold ${isSelected ? "bg-[#D89A79] text-white" : "bg-gray-50 text-gray-700"
+                      }`}
                   >
                     {option.name}
                   </div>
@@ -454,9 +457,8 @@ _Status Pesanan: ${result.status}_
                 type="button"
                 disabled={!isStepValid()}
                 onClick={() => setStep(step + 1)}
-                className={`py-2 px-6 rounded-xl text-white ${
-                  isStepValid() ? "bg-[#D89A79] hover:bg-[#b97d61]" : "bg-gray-400 cursor-not-allowed"
-                }`}
+                className={`py-2 px-6 rounded-xl text-white ${isStepValid() ? "bg-[#D89A79] hover:bg-[#b97d61]" : "bg-gray-400 cursor-not-allowed"
+                  }`}
               >
                 Next
               </button>
