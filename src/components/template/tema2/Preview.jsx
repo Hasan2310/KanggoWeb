@@ -130,7 +130,7 @@ const Home = ({
           <TengahFrame position="bottom-center" />
         </div>
 
-       <div className="relative text-center items-center w-full z-40">
+        <div className="relative text-center items-center w-full z-40">
           <p className='text-5xl'>{hari}</p>
           <div className="flex justify-center items-center space-x-3">
             <h1 className='text-7xl h1'>{tanggal}</h1>
@@ -139,7 +139,7 @@ const Home = ({
               <p className='text-4xl '>{tahun}</p>
             </div>
           </div>
-        </div>  
+        </div>
 
         <div className="mt-10 flex flex-col text-center">
           <p className='text-xl'>{alamat || '-'}</p>

@@ -1,18 +1,18 @@
 import React from "react";
-import Pojokatasframe from './components/bg/pojokatas'
-import TengahFrame from './components/bg/TengahFrame'
-import Medsos from './components/Medsos'
-import Countdown from './components/Countdown'
-import hero from './assets/hero.png'
-import hero2 from './assets/hero2.png'
-import gedung from './assets/gedung.png'
-import g1 from './assets/Gallery/1.png'
-import g2 from './assets/Gallery/2.png'
-import g3 from './assets/Gallery/3.png'
-import g4 from './assets/Gallery/4.png'
-import g5 from './assets/Gallery/5.png'
-import g6 from './assets/Gallery/6.png'
-import './App.css'
+import Pojokatasframe from './components/bg/pojokatas';
+import TengahFrame from './components/bg/TengahFrame';
+import Medsos from './components/Medsos';
+import Countdown from './components/Countdown';
+import hero from './assets/hero.png';
+import hero2 from './assets/hero2.png';
+import gedung from './assets/gedung.png';
+import g1 from './assets/Gallery/1.png';
+import g2 from './assets/Gallery/2.png';
+import g3 from './assets/Gallery/3.png';
+import g4 from './assets/Gallery/4.png';
+import g5 from './assets/Gallery/5.png';
+import g6 from './assets/Gallery/6.png';
+import './App.css';
 
 const monthNames = [
   "Januari", "Februari", "Maret", "April", "Mei", "Juni",
@@ -28,8 +28,7 @@ const Home = ({
   bulan,
   tahun,
   hari,
-  waktumulai,
-  waktuselesai,
+  waktu, // ✅ diganti jadi satu props aja
   alamat,
   namagedung,
   medsosPria = [],
@@ -116,7 +115,7 @@ const Home = ({
 
           <img src={gedung} alt="gedung" className='w-40 mt-20' />
           <p className='font-bold text-xl'>{namagedung || "Ballroom"}</p>
-          <p>{waktumulai || "07:00"} - {waktuselesai || "Selesai"}</p>
+          <p>{waktu || "07:00 - Selesai"}</p> {/* ✅ langsung pake waktu gabungan */}
           <p>{alamat || "Jl Sudirman"}</p>
 
           <div className="flex justify-center mt-8">

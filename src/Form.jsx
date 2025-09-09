@@ -15,10 +15,9 @@ import { AiOutlineInfoCircle } from "react-icons/ai"; // ✅ icon "i"
 import "./App.css";
 
 /* ======================= REUSABLE INPUT DENGAN INFO ======================= */
-const InputWithInfo = ({ placeholder, value, setValue, infoType }) => {
+const InputWithInfo = ({ placeholder, value, setValue, infoType, ...props }) => {
   const [showExample, setShowExample] = useState(false);
 
-  // Auto close setelah 3 detik
   useEffect(() => {
     let timer;
     if (showExample) {
@@ -32,11 +31,11 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType }) => {
   return (
     <div className="relative w-full">
       <Input
-        type="text"
+        {...props}
         placeholder={placeholder}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D89A79] pr-10"
+        className={`w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D89A79] pr-10 ${props.className || ""}`}
       />
 
       {/* Icon info */}
@@ -48,7 +47,7 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType }) => {
         <AiOutlineInfoCircle size={20} />
       </button>
 
-      {/* Popover contoh (animated) */}
+      {/* Popover contoh */}
       <AnimatePresence>
         {showExample && (
           <motion.div
@@ -60,22 +59,21 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType }) => {
           >
             <p className="font-semibold mb-2">Contoh {placeholder}</p>
             {infoType === "username" ? (
-              <img
-                src="/shopee.jpeg" // contoh gambar taruh di public/
-                alt="contoh username"
-                className="rounded-md border"
-              />
-            ) : (
-              <p className="text-gray-700">
-                {infoType === "waliPria" ? "Sejejo & Siti" : "Budi & Ani"}
-              </p>
-            )}
+              <img src="/shopee.jpeg" alt="contoh username" className="rounded-md border" />
+            ) : infoType === "waliPria" ? (
+              <p className="text-gray-700">Sejejo & Siti</p>
+            ) : infoType === "waliWanita" ? (
+              <p className="text-gray-700">Budi & Ani</p>
+            ) : infoType === "waktu" ? (
+              <p className="text-gray-700">10:00 - Selesai</p>
+            ) : null}
           </motion.div>
         )}
       </AnimatePresence>
     </div>
   );
 };
+
 
 /* ======================= FORM ======================= */
 const Form = () => {
@@ -103,15 +101,14 @@ const Form = () => {
   const [tanggal, setTanggal] = useState("");
   const [bulan, setBulan] = useState("");
   const [tahun, setTahun] = useState("");
-  const [waktumulai, setWaktuMulai] = useState("");
-  const [waktuselesai, setWaktuSelesai] = useState("");
+  const [waktu, setWaktu] = useState(""); // ✅ digabung
   const [alamat, setAlamat] = useState("");
   const [namagedung, setNamaGedung] = useState("");
   const [cerita, setCerita] = useState("");
 
   const targetDate =
-    tanggal && bulan && tahun && waktumulai
-      ? `${tahun}-${bulan}-${tanggal}T${waktumulai}:00`
+    tanggal && bulan && tahun && waktu
+      ? `${tahun}-${bulan}-${tanggal}T${waktu.split(" - ")[0]}:00`
       : "";
 
   useEffect(() => {
@@ -140,8 +137,7 @@ const Form = () => {
       tanggal,
       bulan,
       tahun,
-      waktumulai,
-      waktuselesai,
+      waktu, // ✅ cuma 1
       alamat,
       namagedung,
       tanggalPernikahan: targetDate,
@@ -186,21 +182,30 @@ const Form = () => {
     });
 
     try {
-      await fetch(
-        "https://script.google.com/macros/s/AKfycbwgsM2aNzt7E-jiOa3iir7eB0JAEkXmBQflCrwgSV-3xS-rJlir5l4y4EHTemuoi9SlBA/exec",
+      const res = await fetch(
+        "https://script.google.com/macros/s/AKfycbxe_n14tqLMgZ66ztqzRf6roqL73KK1hkw_Rd3Y1uI2upyNpukQ90wd3wFOvbLEvPQ77A/exec",
         {
           method: "POST",
           body: JSON.stringify(data),
           headers: { "Content-Type": "application/json" },
-          mode: "no-cors",
         }
       );
+
+      const result = await res.json(); // ✅ ambil JSON dari Apps Script
 
       clearInterval(progressInterval);
       if (bar) bar.style.width = "100%";
 
-      toast.fire({
-        title: "Data terkirim",
+      // ✅ Alert biasa
+      Swal.fire({
+        title: "Data terkirim 🎉",
+        text: `ID Pesanan: ${result.id}`,
+        icon: "success",
+        confirmButtonText: "Lanjut ke WhatsApp",
+      }).then(() => {
+        // 🚀 Arahkan ke WhatsApp
+        const pesan = `Halo, saya ${result.pria} & ${result.wanita}, pesanan saya ID: ${result.id}`;
+        window.open(`https://wa.me/6285215128586?text=${encodeURIComponent(pesan)}`, "_blank");
       });
     } catch (err) {
       console.error("Fetch error:", err);
@@ -208,8 +213,9 @@ const Form = () => {
       clearInterval(progressInterval);
       if (bar) bar.style.width = "100%";
 
-      toast.fire({
-        title: "Gagal ngirim",
+      Swal.fire({
+        title: "Gagal ngirim 😢",
+        icon: "error",
       });
     }
   };
@@ -224,8 +230,7 @@ const Form = () => {
       bulan,
       tahun,
       hari,
-      waktumulai,
-      waktuselesai,
+      waktu, // ✅ update
       alamat,
       namagedung,
       tanggalPernikahan: targetDate,
@@ -270,11 +275,10 @@ const Form = () => {
                   className="h-50 object-cover mx-auto"
                 />
                 <div
-                  className={`p-3 text-center font-semibold ${
-                    isSelected
+                  className={`p-3 text-center font-semibold ${isSelected
                       ? "bg-[#D89A79] text-white"
                       : "bg-gray-50 text-gray-700"
-                  }`}
+                    }`}
                 >
                   {option.name}
                 </div>
@@ -313,7 +317,7 @@ const Form = () => {
 
           <textarea
             placeholder="Catatan (opsional)"
-            className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
+            className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40"
             rows={3}
             value={catatan}
             onChange={(e) => setCatatan(e.target.value)}
@@ -364,35 +368,43 @@ const Form = () => {
           <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
             Detail Acara
           </h2>
-          <Input
-            type="text"
-            placeholder="Hari"
-            className="w-full border p-3 rounded-xl"
-            value={hari}
-            onChange={(e) => setHari(e.target.value)}
-          />
+
+          {/* Pilih Tanggal */}
           <Input
             type="date"
             className="w-full border p-3 rounded-xl"
             onChange={(e) => {
               const dateObj = new Date(e.target.value);
+
+              // Ambil hari otomatis
+              const options = { weekday: "long" };
+              const hariStr = dateObj.toLocaleDateString("id-ID", options);
+
+              setHari(hariStr);
               setTanggal(String(dateObj.getDate()).padStart(2, "0"));
               setBulan(String(dateObj.getMonth() + 1).padStart(2, "0"));
               setTahun(String(dateObj.getFullYear()));
             }}
           />
+
+          {/* Output Hari */}
           <Input
-            type="time"
+            type="text"
+            placeholder="Hari"
             className="w-full border p-3 rounded-xl"
-            value={waktumulai}
-            onChange={(e) => setWaktuMulai(e.target.value)}
+            value={hari}
+            readOnly
           />
-          <Input
-            type="time"
-            className="w-full border p-3 rounded-xl"
-            value={waktuselesai}
-            onChange={(e) => setWaktuSelesai(e.target.value)}
+
+          {/* Input Waktu gabungan */}
+          <InputWithInfo
+            placeholder="Waktu"
+            value={waktu}
+            setValue={setWaktu}
+            onChange={(e) => setWaktu(e.target.value)}
+            infoType="waktu"
           />
+
           <Input
             type="text"
             placeholder="Nama Gedung"
@@ -427,9 +439,7 @@ const Form = () => {
           <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
             Preview & Kirim
           </h2>
-          <p className="text-gray-600">
-            Lihat preview undangan sebelum dikirim
-          </p>
+          <p className="text-gray-600">Lihat preview undangan sebelum dikirim</p>
           <button
             type="submit"
             className="w-full py-3 bg-[#D89A79] text-white font-semibold rounded-xl hover:bg-[#b97d61] transition"
@@ -446,14 +456,7 @@ const Form = () => {
     if (step === 2) return source === "web" || username.trim() !== "";
     if (step === 3) return pria.trim() !== "" && wanita.trim() !== "";
     if (step === 4)
-      return (
-        hari.trim() !== "" &&
-        tanggal &&
-        bulan &&
-        tahun &&
-        waktumulai.trim() !== "" &&
-        alamat.trim() !== ""
-      );
+      return hari.trim() !== "" && tanggal && bulan && tahun && waktu.trim() !== "" && alamat.trim() !== "";
     return true;
   };
 
@@ -487,19 +490,17 @@ const Form = () => {
             {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex-1 flex items-center">
                 <div
-                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-semibold text-sm transition ${
-                    step >= s
+                  className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-semibold text-sm transition ${step >= s
                       ? "bg-[#D89A79] text-white border-[#D89A79]"
                       : "bg-white text-gray-500 border-gray-300"
-                  }`}
+                    }`}
                 >
                   {s}
                 </div>
                 {s < 5 && (
                   <div
-                    className={`flex-1 h-[2px] mx-2 ${
-                      step > s ? "bg-[#D89A79]" : "bg-gray-300"
-                    }`}
+                    className={`flex-1 h-[2px] mx-2 ${step > s ? "bg-[#D89A79]" : "bg-gray-300"
+                      }`}
                   />
                 )}
               </div>
@@ -537,11 +538,10 @@ const Form = () => {
                   type="button"
                   onClick={() => isStepValid() && setStep(step + 1)}
                   disabled={!isStepValid()}
-                  className={`px-8 py-3 rounded-full font-semibold transition ${
-                    isStepValid()
+                  className={`px-8 py-3 rounded-full font-semibold transition ${isStepValid()
                       ? "bg-[#D89A79] text-white hover:bg-[#b97d61]"
                       : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  }`}
+                    }`}
                 >
                   Next
                 </button>
