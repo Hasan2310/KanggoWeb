@@ -1,17 +1,11 @@
 import React, { useState, useEffect } from "react";
-import PreviewTema1 from "./components/template/tema1/Preview";
-import PreviewTema2 from "./components/template/tema2/Preview";
 import PreviewTema3 from "./components/template/tema3/Preview";
-import PreviewTema4 from "./components/template/tema4/Preview";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import Input from "./components/Input";
-import tema1 from "/Tema1.png";
-import tema2 from "/Tema2.png";
 import tema3 from "/Tema3.png";
-import tema4 from "/Tema4.png";
 import Swal from "sweetalert2";
-import { AiOutlineInfoCircle } from "react-icons/ai"; // ✅ icon "i"
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import "./App.css";
 
 /* ======================= REUSABLE INPUT DENGAN INFO ======================= */
@@ -74,7 +68,6 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType, ...props }) => 
   );
 };
 
-
 /* ======================= FORM ======================= */
 const Form = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -93,17 +86,17 @@ const Form = () => {
   // Data Mempelai
   const [pria, setPria] = useState("");
   const [wanita, setWanita] = useState("");
-  const [walipria, setWaliPria] = useState("");
-  const [waliwanita, setWaliWanita] = useState("");
+  const [waliPria, setWaliPria] = useState("");
+  const [waliWanita, setWaliWanita] = useState("");
 
   // Detail Acara
   const [hari, setHari] = useState("");
   const [tanggal, setTanggal] = useState("");
   const [bulan, setBulan] = useState("");
   const [tahun, setTahun] = useState("");
-  const [waktu, setWaktu] = useState(""); // ✅ digabung
+  const [waktu, setWaktu] = useState("");
   const [alamat, setAlamat] = useState("");
-  const [namagedung, setNamaGedung] = useState("");
+  const [namaGedung, setNamaGedung] = useState("");
   const [cerita, setCerita] = useState("");
 
   const targetDate =
@@ -131,24 +124,24 @@ const Form = () => {
       source,
       pria,
       wanita,
-      walipria,
-      waliwanita,
+      waliPria,
+      waliWanita,
       hari,
       tanggal,
       bulan,
       tahun,
-      waktu, // ✅ cuma 1
+      waktu,
       alamat,
-      namagedung,
+      namaGedung,
       tanggalPernikahan: targetDate,
       cerita,
       tema,
+      status: "Pending",
     };
 
     let progressInterval;
     let bar;
 
-    // Base toast
     let toast = Swal.mixin({
       toast: true,
       position: "top",
@@ -157,7 +150,6 @@ const Form = () => {
       timer: undefined,
     });
 
-    // ⏳ Loading toast
     toast.fire({
       title: "Ngirim data...",
       didOpen: (toastEl) => {
@@ -191,22 +183,27 @@ const Form = () => {
         }
       );
 
-      const result = await res.json(); // ✅ ambil JSON dari Apps Script
+      const result = await res.json();
 
       clearInterval(progressInterval);
       if (bar) bar.style.width = "100%";
 
-      // ✅ Alert biasa
-      Swal.fire({
-        title: "Data terkirim 🎉",
-        text: `ID Pesanan: ${result.id}`,
-        icon: "success",
-        confirmButtonText: "Lanjut ke WhatsApp",
-      }).then(() => {
-        // 🚀 Arahkan ke WhatsApp
-        const pesan = `Halo, saya ${result.pria} & ${result.wanita}, pesanan saya ID: ${result.id}`;
-        window.open(`https://wa.me/6285215128586?text=${encodeURIComponent(pesan)}`, "_blank");
-      });
+      if (result?.status === "success") {
+        Swal.fire({
+          title: "Data terkirim 🎉",
+          text: `ID Pesanan: ${result.id}`,
+          icon: "success",
+          confirmButtonText: "Lanjut ke WhatsApp",
+        }).then(() => {
+          const pesan = `Halo, saya ${result.pria} & ${result.wanita}, pesanan saya ID: ${result.id}`;
+          window.open(
+            `https://wa.me/6285215128586?text=${encodeURIComponent(pesan)}`,
+            "_blank"
+          );
+        });
+      } else {
+        throw new Error("Server error");
+      }
     } catch (err) {
       console.error("Fetch error:", err);
 
@@ -215,6 +212,7 @@ const Form = () => {
 
       Swal.fire({
         title: "Gagal ngirim 😢",
+        text: "Coba cek koneksi internet atau hubungi admin.",
         icon: "error",
       });
     }
@@ -223,16 +221,16 @@ const Form = () => {
   const renderPreview = () => {
     const props = {
       pria,
-      walipria,
+      waliPria,
       wanita,
-      waliwanita,
+      waliWanita,
       tanggal,
       bulan,
       tahun,
       hari,
-      waktu, // ✅ update
+      waktu,
       alamat,
-      namagedung,
+      namaGedung,
       tanggalPernikahan: targetDate,
       cerita,
     };
@@ -242,13 +240,10 @@ const Form = () => {
         return <PreviewTema3 {...props} />;
       default:
         return (
-          <div
-            className="p-6 text-center text-gray-700 font-semibold 
+          <div className="p-6 text-center text-gray-700 font-semibold 
             bg-gradient-to-r from-indigo-100 via-purple-100 to-pink-100 
-            rounded-xl shadow-md animate-pulse h-screen flex items-center justify-center"
-          >
-            🎨 Silakan pilih&nbsp;
-            <span className="underline decoration-wavy"> tema</span>
+            rounded-xl shadow-md animate-pulse h-screen flex items-center justify-center">
+            🎨 Silakan pilih <span className="underline decoration-wavy">tema</span>
           </div>
         );
     }
@@ -269,15 +264,9 @@ const Form = () => {
                 className={`cursor-pointer border-2 rounded-xl overflow-hidden shadow-md flex-1 transition 
                   ${isSelected ? "border-[#D89A79]" : "border-gray-200"}`}
               >
-                <img
-                  src={option.preview}
-                  alt={option.name}
-                  className="h-50 object-cover mx-auto"
-                />
+                <img src={option.preview} alt={option.name} className="h-50 object-cover mx-auto" />
                 <div
-                  className={`p-3 text-center font-semibold ${isSelected
-                      ? "bg-[#D89A79] text-white"
-                      : "bg-gray-50 text-gray-700"
+                  className={`p-3 text-center font-semibold ${isSelected ? "bg-[#D89A79] text-white" : "bg-gray-50 text-gray-700"
                     }`}
                 >
                   {option.name}
@@ -304,6 +293,7 @@ const Form = () => {
             <option value="shopee">🛒 Shopee</option>
             <option value="lazada">📦 Lazada</option>
             <option value="tokopedia">🐸 Tokopedia</option>
+            <option value="web">🌐 Website</option>
           </select>
 
           {source !== "web" && (
@@ -348,13 +338,13 @@ const Form = () => {
           />
           <InputWithInfo
             placeholder="Wali Pria"
-            value={walipria}
+            value={waliPria}
             setValue={setWaliPria}
             infoType="waliPria"
           />
           <InputWithInfo
             placeholder="Wali Wanita"
-            value={waliwanita}
+            value={waliWanita}
             setValue={setWaliWanita}
             infoType="waliWanita"
           />
@@ -368,15 +358,11 @@ const Form = () => {
           <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">
             Detail Acara
           </h2>
-
-          {/* Pilih Tanggal */}
           <Input
             type="date"
             className="w-full border p-3 rounded-xl"
             onChange={(e) => {
               const dateObj = new Date(e.target.value);
-
-              // Ambil hari otomatis
               const options = { weekday: "long" };
               const hariStr = dateObj.toLocaleDateString("id-ID", options);
 
@@ -386,8 +372,6 @@ const Form = () => {
               setTahun(String(dateObj.getFullYear()));
             }}
           />
-
-          {/* Output Hari */}
           <Input
             type="text"
             placeholder="Hari"
@@ -395,21 +379,17 @@ const Form = () => {
             value={hari}
             readOnly
           />
-
-          {/* Input Waktu gabungan */}
           <InputWithInfo
             placeholder="Waktu"
             value={waktu}
             setValue={setWaktu}
-            onChange={(e) => setWaktu(e.target.value)}
             infoType="waktu"
           />
-
           <Input
             type="text"
             placeholder="Nama Gedung"
             className="w-full border p-3 rounded-xl"
-            value={namagedung}
+            value={namaGedung}
             onChange={(e) => setNamaGedung(e.target.value)}
           />
           <textarea
@@ -480,19 +460,15 @@ const Form = () => {
           {renderPhonePreview()}
         </div>
         <motion.div
-          className="fixed bottom-0 right-0 w-full md:w-1/2
-             bg-white/90 p-8 border border-[#D89A79]/30 
-             rounded-3xl shadow-xl 
-             max-h-screen scroll-y-hidden"
-        >
+          className="fixed bottom-0 right-0 w-full md:w-1/2 bg-white/90 p-8 border border-[#D89A79]/30 rounded-3xl shadow-xl max-h-screen scroll-y-hidden">
           {/* Progress */}
           <div className="flex items-center justify-between mb-8 mt-10">
             {[1, 2, 3, 4, 5].map((s) => (
               <div key={s} className="flex-1 flex items-center">
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full border-2 font-semibold text-sm transition ${step >= s
-                      ? "bg-[#D89A79] text-white border-[#D89A79]"
-                      : "bg-white text-gray-500 border-gray-300"
+                    ? "bg-[#D89A79] text-white border-[#D89A79]"
+                    : "bg-white text-gray-500 border-gray-300"
                     }`}
                 >
                   {s}
@@ -506,46 +482,41 @@ const Form = () => {
               </div>
             ))}
           </div>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={step}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -16 }}
-                transition={{ duration: 0.3 }}
-              >
-                {renderStep()}
-              </motion.div>
-            </AnimatePresence>
 
-            {/* Navigation Buttons */}
-            <div className="flex justify-between items-center pt-4">
-              {step > 1 ? (
+          {/* Form Step */}
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {renderStep()}
+
+            {/* Tombol Navigasi */}
+            <div className="flex justify-between mt-8">
+              {step > 1 && (
                 <button
                   type="button"
                   onClick={() => setStep(step - 1)}
-                  className="px-6 py-3 rounded-full bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
+                  className="px-5 py-2 rounded-xl border border-gray-300 text-gray-600 hover:bg-gray-100"
                 >
-                  Back
+                  ⬅ Kembali
                 </button>
-              ) : (
-                <div></div>
               )}
-
-              {step < 5 ? (
+              {step < 5 && (
                 <button
                   type="button"
-                  onClick={() => isStepValid() && setStep(step + 1)}
-                  disabled={!isStepValid()}
-                  className={`px-8 py-3 rounded-full font-semibold transition ${isStepValid()
-                      ? "bg-[#D89A79] text-white hover:bg-[#b97d61]"
-                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                    }`}
+                  onClick={() => {
+                    if (isStepValid()) {
+                      setStep(step + 1);
+                    } else {
+                      Swal.fire({
+                        title: "Isi dulu field yang wajib ⚠️",
+                        icon: "warning",
+                        confirmButtonText: "Oke",
+                      });
+                    }
+                  }}
+                  className="ml-auto px-6 py-2 bg-[#D89A79] text-white font-semibold rounded-xl hover:bg-[#b97d61] transition"
                 >
-                  Next
+                  Lanjut ➡
                 </button>
-              ) : null}
+              )}
             </div>
           </form>
         </motion.div>
