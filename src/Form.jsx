@@ -167,28 +167,28 @@ dan jangan lupa sertakan juga foto pernikahanmu 📸💍`,
           const pesan = `
 Halo Admin 👋
 
-Saya *${data.pria}* & *${data.wanita}* ingin konfirmasi pesanan dengan detail berikut:
+Saya ${data.pria} & ${data.wanita} ingin konfirmasi pesanan dengan detail berikut:
 
-📌 *ID Pesanan:* ${result.id}
-👤 *Username:* ${data.username || "-"}
-📝 *Catatan:* ${data.catatan || "-"}
-📖 *Source:* ${data.source || "-"}
+📌 ID Pesanan: ${result.id}
+👤 Username: ${data.username || "-"}
+📝 Catatan: ${data.catatan || "-"}
+📖 Source: ${data.source || "-"}
 
-👰 *Mempelai Wanita:* ${data.wanita || "-"}
-🤵 *Mempelai Pria:* ${data.pria || "-"}
-👩‍🦳 *Wali Wanita:* ${data.waliWanita || "-"}
-👨‍🦳 *Wali Pria:* ${data.waliPria || "-"}
+👰 Mempelai Wanita: ${data.wanita || "-"}
+🤵 Mempelai Pria: ${data.pria || "-"}
+👩‍🦳 Wali Wanita: ${data.waliWanita || "-"}
+👨‍🦳 Wali Pria: ${data.waliPria || "-"}
 
-📅 *Tanggal:* ${data.hari || "-"}, ${data.tanggal || "-"} ${data.bulan || "-"} ${data.tahun || "-"}
-🕒 *Waktu:* ${data.waktu || "-"}
-📍 *Alamat:* ${data.alamat || "-"}
-🏢 *Gedung:* ${data.namaGedung || "-"}
+📅 Tanggal: ${data.hari || "-"}, ${data.tanggal || "-"} ${data.bulan || "-"} ${data.tahun || "-"}
+🕒 Waktu: ${data.waktu || "-"}
+📍 Alamat: ${data.alamat || "-"}
+🏢 Gedung: ${data.namaGedung || "-"}
 
-💍 *Tanggal Pernikahan:* ${data.tanggalPernikahan || "-"}
-🎨 *Tema:* ${data.tema || "-"}
-📚 *Cerita:* ${data.cerita || "-"}
+💍 Tanggal Pernikahan: ${data.tanggalPernikahan || "-"}
+🎨 Tema: ${data.tema || "-"}
+📚 Cerita: ${data.cerita || "-"}
 
-_Status Pesanan: ${result.status}_
+Status Pesanan: ${result.status}
 `;
 
           navigator.clipboard.writeText(pesan).then(() => {
@@ -385,8 +385,8 @@ _Status Pesanan: ${result.status}_
               type="submit"
               disabled={isLoading}
               className={`w-full py-3 rounded-xl font-semibold transition ${isLoading
-                  ? "bg-gray-400 cursor-not-allowed text-white"
-                  : "bg-[#D89A79] hover:bg-[#b97d61] text-white"
+                ? "bg-gray-400 cursor-not-allowed text-white"
+                : "bg-[#D89A79] hover:bg-[#b97d61] text-white"
                 }`}
             >
               {isLoading ? "Mengirim..." : "Kirim"}
