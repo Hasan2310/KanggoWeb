@@ -211,6 +211,7 @@ Status Pesanan: ${result.status}
       Swal.fire({
         title: "Gagal ngirim 😢",
         text: "Coba cek koneksi internet atau hubungi admin.",
+        confirmButtonColor: "#D89A79",
       });
     } finally {
       setIsLoading(false); // tombol aktif lagi setelah selesai
@@ -406,32 +407,32 @@ Status Pesanan: ${result.status}
     return true;
   };
 
-const renderPhonePreview = () => (
-  <motion.div
-    className="relative w-[390px] h-screen bg-black rounded-[3rem] p-4 
+  const renderPhonePreview = () => (
+    <motion.div
+      className="relative w-[390px] h-screen bg-black rounded-[3rem] p-4 
                shadow-[0_20px_50px_rgba(0,0,0,0.7)] 
                flex justify-center items-center border-4 border-black"
-    animate={{ y: [0, -6, 0] }}
-    transition={{ duration: 6, repeat: Infinity }}
-  >
-    {/* Notch */}
-    <div className="absolute top-2 w-32 h-6 bg-black rounded-b-3xl flex justify-center items-center z-50 shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
-      <div className="w-10 h-2 bg-gray-800 rounded-full" /> {/* speaker */}
-    </div>
+      animate={{ y: [0, -6, 0] }}
+      transition={{ duration: 6, repeat: Infinity }}
+    >
+      {/* Notch */}
+      <div className="absolute top-2 w-32 h-6 bg-black rounded-b-3xl flex justify-center items-center z-50 shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+        <div className="w-10 h-2 bg-gray-800 rounded-full" /> {/* speaker */}
+      </div>
 
-    {/* Tombol samping kiri */}
-    <div className="absolute left-[-6px] top-32 w-1 h-16 bg-gray-700 rounded-r-lg shadow-[2px_0_5px_rgba(0,0,0,0.5)]" />
-    <div className="absolute left-[-6px] top-56 w-1 h-10 bg-gray-700 rounded-r-lg shadow-[2px_0_5px_rgba(0,0,0,0.5)]" />
+      {/* Tombol samping kiri */}
+      <div className="absolute left-[-6px] top-32 w-1 h-16 bg-gray-700 rounded-r-lg shadow-[2px_0_5px_rgba(0,0,0,0.5)]" />
+      <div className="absolute left-[-6px] top-56 w-1 h-10 bg-gray-700 rounded-r-lg shadow-[2px_0_5px_rgba(0,0,0,0.5)]" />
 
-    {/* Tombol samping kanan */}
-    <div className="absolute right-[-6px] top-40 w-1 h-20 bg-gray-700 rounded-l-lg shadow-[-2px_0_5px_rgba(0,0,0,0.5)]" />
+      {/* Tombol samping kanan */}
+      <div className="absolute right-[-6px] top-40 w-1 h-20 bg-gray-700 rounded-l-lg shadow-[-2px_0_5px_rgba(0,0,0,0.5)]" />
 
-    {/* Layar */}
-    <div className="bg-white w-full h-full rounded-[2.5rem] scroll-y-hidden shadow-inner">
-      {renderPreview()}
-    </div>
-  </motion.div>
-);
+      {/* Layar */}
+      <div className="bg-white w-full h-full rounded-[2.5rem] scroll-y-hidden shadow-inner">
+        {renderPreview()}
+      </div>
+    </motion.div>
+  );
 
   return (
     <div className="mx-auto">
@@ -475,7 +476,18 @@ const renderPhonePreview = () => (
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit}>{renderStep()}</form>
+          <form
+            onSubmit={handleSubmit}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && step < 5) {
+                e.preventDefault(); // cegah submit
+                if (isStepValid()) setStep(step + 1); // lanjut ke step berikutnya
+              }
+            }}
+          >
+            {renderStep()}
+          </form>
+
 
           {/* Navigation */}
           <div className="flex justify-between mt-6">
