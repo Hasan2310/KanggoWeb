@@ -54,9 +54,9 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType, ...props }) => 
             <p className="font-semibold mb-2">Contoh {placeholder}</p>
             {infoType === "username" ? (
               <img src="/shopee.jpeg" alt="contoh username" className="rounded-md border" />
-            ) : infoType === "waliPria" ? (
+            ) : infoType === "walipria" ? (
               <p className="text-gray-700">Sejejo & Siti</p>
-            ) : infoType === "waliWanita" ? (
+            ) : infoType === "waliwanita" ? (
               <p className="text-gray-700">Budi & Ani</p>
             ) : infoType === "waktu" ? (
               <p className="text-gray-700">10:00 - Selesai</p>
@@ -86,8 +86,8 @@ const Form = () => {
   // Data Mempelai
   const [pria, setPria] = useState("");
   const [wanita, setWanita] = useState("");
-  const [waliPria, setWaliPria] = useState("");
-  const [waliWanita, setWaliWanita] = useState("");
+  const [walipria, setWalipria] = useState("");
+  const [waliwanita, setWaliwanita] = useState("");
 
   // Detail Acara
   const [hari, setHari] = useState("");
@@ -96,7 +96,7 @@ const Form = () => {
   const [tahun, setTahun] = useState("");
   const [waktu, setWaktu] = useState("");
   const [alamat, setAlamat] = useState("");
-  const [namaGedung, setNamaGedung] = useState("");
+  const [namagedung, setNamagedung] = useState("");
   const [cerita, setCerita] = useState("");
 
   const targetDate =
@@ -128,15 +128,15 @@ const Form = () => {
       source,
       pria,
       wanita,
-      waliPria,
-      waliWanita,
+      walipria,
+      waliwanita,
       hari,
       tanggal,
       bulan,
       tahun,
       waktu,
       alamat,
-      namaGedung,
+      namagedung,
       tanggalPernikahan: targetDate,
       cerita,
       tema,
@@ -176,13 +176,13 @@ Saya ${data.pria} & ${data.wanita} ingin konfirmasi pesanan dengan detail beriku
 
 👰 Mempelai Wanita: ${data.wanita || "-"}
 🤵 Mempelai Pria: ${data.pria || "-"}
-👩‍🦳 Wali Wanita: ${data.waliWanita || "-"}
-👨‍🦳 Wali Pria: ${data.waliPria || "-"}
+👩‍🦳 Wali Wanita: ${data.waliwanita || "-"}
+👨‍🦳 Wali Pria: ${data.walipria || "-"}
 
 📅 Tanggal: ${data.hari || "-"}, ${data.tanggal || "-"} ${data.bulan || "-"} ${data.tahun || "-"}
 🕒 Waktu: ${data.waktu || "-"}
 📍 Alamat: ${data.alamat || "-"}
-🏢 Gedung: ${data.namaGedung || "-"}
+🏢 Gedung: ${data.namagedung || "-"}
 
 💍 Tanggal Pernikahan: ${data.tanggalPernikahan || "-"}
 🎨 Tema: ${data.tema || "-"}
@@ -227,16 +227,16 @@ Status Pesanan: ${result.status}
   const renderPreview = () => {
     const props = {
       pria,
-      waliPria,
+      walipria,
       wanita,
-      waliWanita,
+      waliwanita,
       tanggal,
       bulan,
       tahun,
       hari,
       waktu,
       alamat,
-      namaGedung,
+      namagedung,
       tanggalPernikahan: targetDate,
       cerita,
     };
@@ -332,8 +332,8 @@ Status Pesanan: ${result.status}
             <h2 className="text-xl font-bold pb-2 border-b-2 border-[#D89A79]/30">Data Mempelai</h2>
             <Input type="text" placeholder="Nama Pria" className="w-full border p-3 rounded-xl" value={pria} onChange={(e) => setPria(e.target.value)} />
             <Input type="text" placeholder="Nama Wanita" className="w-full border p-3 rounded-xl" value={wanita} onChange={(e) => setWanita(e.target.value)} />
-            <InputWithInfo placeholder="Wali Pria" value={waliPria} setValue={setWaliPria} infoType="waliPria" />
-            <InputWithInfo placeholder="Wali Wanita" value={waliWanita} setValue={setWaliWanita} infoType="waliWanita" />
+            <InputWithInfo placeholder="Wali Pria" value={walipria} setValue={setWalipria} infoType="walipria" />
+            <InputWithInfo placeholder="Wali Wanita" value={waliwanita} setValue={setWaliwanita} infoType="waliwanita" />
           </div>
         )}
 
@@ -356,7 +356,7 @@ Status Pesanan: ${result.status}
             />
             <Input type="text" placeholder="Hari" className="w-full border p-3 rounded-xl" value={hari} readOnly />
             <InputWithInfo placeholder="Waktu" value={waktu} setValue={setWaktu} infoType="waktu" />
-            <Input type="text" placeholder="Nama Gedung" className="w-full border p-3 rounded-xl" value={namaGedung} onChange={(e) => setNamaGedung(e.target.value)} />
+            <Input type="text" placeholder="Nama Gedung" className="w-full border p-3 rounded-xl" value={namagedung} onChange={(e) => setNamagedung(e.target.value)} />
             <textarea
               placeholder="Alamat"
               className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
@@ -364,13 +364,13 @@ Status Pesanan: ${result.status}
               onChange={(e) => setAlamat(e.target.value)}
               required
             ></textarea>
-            <textarea
+            {/* <textarea
               placeholder="Cerita"
               className="w-full border p-3 rounded-xl focus:outline-none focus:ring-2 border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
               value={cerita}
               onChange={(e) => setCerita(e.target.value)}
               required
-            ></textarea>
+            ></textarea> */}
           </div>
         )}
 
@@ -406,15 +406,32 @@ Status Pesanan: ${result.status}
     return true;
   };
 
-  const renderPhonePreview = () => (
-    <motion.div
-      className="relative w-[390px] h-screen bg-black rounded-[2rem] p-4 shadow-2xl flex justify-center items-center"
-      animate={{ y: [0, -6, 0] }}
-      transition={{ duration: 6, repeat: Infinity }}
-    >
-      <div className="bg-white w-full h-full rounded-[1.5rem] scroll-y-hidden">{renderPreview()}</div>
-    </motion.div>
-  );
+const renderPhonePreview = () => (
+  <motion.div
+    className="relative w-[390px] h-screen bg-black rounded-[3rem] p-4 
+               shadow-[0_20px_50px_rgba(0,0,0,0.7)] 
+               flex justify-center items-center border-4 border-black"
+    animate={{ y: [0, -6, 0] }}
+    transition={{ duration: 6, repeat: Infinity }}
+  >
+    {/* Notch */}
+    <div className="absolute top-2 w-32 h-6 bg-black rounded-b-3xl flex justify-center items-center z-50 shadow-[0_2px_6px_rgba(0,0,0,0.6)]">
+      <div className="w-10 h-2 bg-gray-800 rounded-full" /> {/* speaker */}
+    </div>
+
+    {/* Tombol samping kiri */}
+    <div className="absolute left-[-6px] top-32 w-1 h-16 bg-gray-700 rounded-r-lg shadow-[2px_0_5px_rgba(0,0,0,0.5)]" />
+    <div className="absolute left-[-6px] top-56 w-1 h-10 bg-gray-700 rounded-r-lg shadow-[2px_0_5px_rgba(0,0,0,0.5)]" />
+
+    {/* Tombol samping kanan */}
+    <div className="absolute right-[-6px] top-40 w-1 h-20 bg-gray-700 rounded-l-lg shadow-[-2px_0_5px_rgba(0,0,0,0.5)]" />
+
+    {/* Layar */}
+    <div className="bg-white w-full h-full rounded-[2.5rem] scroll-y-hidden shadow-inner">
+      {renderPreview()}
+    </div>
+  </motion.div>
+);
 
   return (
     <div className="mx-auto">
