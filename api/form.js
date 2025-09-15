@@ -2,7 +2,7 @@ export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       const gasRes = await fetch(
-        "https://script.google.com/macros/s/AKfycbwoXJCiZQd2OowGFjLrDjQuCTaRukuXge2zFJqo5xXKPW3an6DRcnwm3F2iML66QD_lOg/exec", // 🔥 ganti dengan URL GAS lo
+        "https://script.google.com/macros/s/AKfycbx2CYkc9HXy6CQdPSMW31REujTIAXhPCP7hrGFAVIJFZJmdzJHRBUR1qUGFZickkq7lNg/exec", // 🔥 ganti dengan URL GAS lo
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

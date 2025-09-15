@@ -72,7 +72,7 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType, ...props }) => 
 const Form = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const temaFromUrl = searchParams.get("tema") || "";
-  const sourceFromUrl = searchParams.get("source") || "shopee";
+  const sourceFromUrl = searchParams.get("source") || "web";
 
   const [step, setStep] = useState(1);
   const [tema, setTema] = useState(temaFromUrl);
@@ -303,10 +303,9 @@ Status Pesanan: ${result.status}
               onChange={(e) => setSource(e.target.value)}
               className="w-full border p-3 rounded-xl border-gray-200 focus:ring-[#D89A79]/40 focus:border-[#D89A79]"
             >
-              <option value="shopee">🛒 Shopee</option>
-              <option value="lazada">📦 Lazada</option>
-              <option value="tokopedia">🐸 Tokopedia</option>
-              {/* <option value="web">🌐 Website</option> */}
+              <option value="web">🌐 Website</option>
+              <option value="olx">📢 OLX</option>
+              {/* <option value="tokopedia">🐸 Tokopedia</option> */}
             </select>
 
             {source !== "web" && (
