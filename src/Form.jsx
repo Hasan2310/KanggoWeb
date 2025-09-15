@@ -158,7 +158,7 @@ const Form = () => {
           html: `Silakan salin pesan ini untuk konfirmasi ya ✨ <br><br>
 🆔 <b>ID Pesanan:</b> ${result.id} <br><br>
 Setelah itu, kirimkan pesan ini ke admin lewat aplikasi yang dipesan 
-(<i>Shopee / Tokopedia / Lazada</i>) <br>
+(<i>OlX</i>) <br>
 dan jangan lupa sertakan juga foto pernikahanmu 📸💍`,
           confirmButtonText: "Salin Pesan",
           allowOutsideClick: false,
