@@ -413,7 +413,7 @@ Status Pesanan: ${result.status}
   const isStepValid = () => {
     if (step === 1) return tema.trim() !== "";
     if (step === 2) return source === "web" || username.trim() !== "";
-    if (step === 3) return pria.trim() !== "" && wanita.trim() !== "";
+    if (step === 3) return pria.trim() !== "" && wanita.trim() !== "" !== "" && walipria.trim() !== "" && waliwanita.trim() !== "";
     if (step === 4) return hari.trim() !== "" && tanggal && bulan && tahun && waktu.trim() !== "" && alamat.trim() !== "";
     return true;
   };
