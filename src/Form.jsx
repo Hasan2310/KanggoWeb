@@ -321,12 +321,12 @@ Status Pesanan: ${result.status}
 
             {source !== "web" && (
               <InputWithInfo
-  placeholder={`Username ${source}`}
-  value={username}
-  setValue={setUsername}
-  infoType="username"
-  source={source}   // <<< ini yg kurang
-/>
+                placeholder={`Username ${source}`}
+                value={username}
+                setValue={setUsername}
+                infoType="username"
+                source={source}   // <<< ini yg kurang
+              />
             )}
 
             <textarea
