@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from "react";
 import PreviewTema3 from "./components/template/tema3/Preview";
 import { motion, AnimatePresence } from "framer-motion";
+import { AiOutlineInfoCircle } from "react-icons/ai";
 import { useSearchParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import Input from "./components/Input";
 import tema3 from "/Tema3.png";
 import Swal from "sweetalert2";
-import { AiOutlineInfoCircle } from "react-icons/ai";
 import "./App.css";
 
 /* ======================= REUSABLE INPUT DENGAN INFO ======================= */
-const InputWithInfo = ({ placeholder, value, setValue, infoType, ...props }) => {
+const InputWithInfo = ({ placeholder, value, setValue, infoType, source, ...props }) => {
   const [showExample, setShowExample] = useState(false);
 
   useEffect(() => {
@@ -21,6 +21,13 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType, ...props }) => 
     }
     return () => clearTimeout(timer);
   }, [showExample]);
+
+  // mapping gambar per source
+  const sourceImg = {
+    olx: "/olx.jpeg",
+    // tokopedia: "/tokopedia.jpeg",
+    // web: "/web.jpeg",
+  };
 
   return (
     <div className="relative w-full">
@@ -53,7 +60,11 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType, ...props }) => 
           >
             <p className="font-semibold mb-2">Contoh {placeholder}</p>
             {infoType === "username" ? (
-              <img src="/shopee.jpeg" alt="contoh username" className="rounded-md border" />
+              <img
+                src={sourceImg[source] || "/default.jpeg"}
+                alt={`contoh username ${source}`}
+                className="rounded-md border"
+              />
             ) : infoType === "walipria" ? (
               <p className="text-gray-700">Sejejo & Siti</p>
             ) : infoType === "waliwanita" ? (
