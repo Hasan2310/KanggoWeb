@@ -24,7 +24,7 @@ const InputWithInfo = ({ placeholder, value, setValue, infoType, source, ...prop
 
   // mapping gambar per source
   const sourceImg = {
-    olx: "/olx.jpeg",
+    olx: "/olx.jpeg"
     // tokopedia: "/tokopedia.jpeg",
     // web: "/web.jpeg",
   };
